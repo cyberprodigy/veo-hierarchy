@@ -7,6 +7,7 @@ import createNode from './middlewares/createNode';
 import readinessCheck from './middlewares/readinessCheck';
 import getAllNodes from './middlewares/getAllNodes';
 import getAllEdges from './middlewares/getAllEdges';
+import cors from 'cors';
 
 async function bootstrap() {
   const PORT = process.env.PORT || 4000;
@@ -16,6 +17,22 @@ async function bootstrap() {
       extended: true,
     })
   );
+
+  const allowedOrigins = ['http://localhost:3000'];
+  app.use(
+    cors({
+      origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+          const msg =
+            'The CORS policy for this site does not allow access from the specified Origin.';
+          return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+      },
+    })
+  );
+
   app
     .use(healthCheck())
     .use(readinessCheck())
@@ -29,10 +46,7 @@ async function bootstrap() {
     console.log('Unhandled NODE exception', error);
   });
 
-  console.log(
-    `Running a backend server at http://localhost:${PORT}`,
-    {}
-  );
+  console.log(`Running a backend server at http://localhost:${PORT}`, {});
 }
 
 bootstrap();
