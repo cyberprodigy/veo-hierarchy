@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get('/getAllNodes', async (req: Request, res: Response) => {
   const nodes = await dbMock.getAllNodes();
+
   res.send(JSON.stringify(nodes));
 });
 
