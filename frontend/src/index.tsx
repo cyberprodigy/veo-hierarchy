@@ -1,19 +1,58 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import './App.css';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+import VisGraph, {
+  GraphData,
+  GraphEvents,
+  Options,
+} from 'react-vis-graph-wrapper';
+import ReactDOM from 'react-dom';
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+function App() {
+  const graph: GraphData = {
+    nodes: [
+      { id: 1, label: 'Node 1', title: 'node 1 tootip text' },
+      { id: 2, label: 'Node 2', title: 'node 2 tootip text' },
+      { id: 3, label: 'Node 3', title: 'node 3 tootip text' },
+      { id: 4, label: 'Node 4', title: 'node 4 tootip text' },
+      { id: 5, label: 'Node 5', title: 'node 5 tootip text' },
+    ],
+    edges: [
+      { from: 1, to: 2 },
+      { from: 1, to: 3 },
+      { from: 2, to: 4 },
+      { from: 2, to: 5 },
+    ],
+  };
+
+  const options: Options = {
+    layout: {
+      hierarchical: true,
+    },
+    edges: {
+      color: '#000000',
+    },
+    height: '500px',
+  };
+
+  const events: GraphEvents = {
+    select: (event: any) => {
+      const { nodes, edges } = event;
+      console.log(nodes, edges);
+    },
+  };
+  return (
+    <VisGraph
+      graph={graph}
+      options={options}
+      events={events}
+      getNetwork={(network: any) => {
+        //  if you want access to vis.js network api you can set the state in a parent component using this property
+        console.log(network);
+      }}
+    />
+  );
+}
+
+const rootElement = document.getElementById("root");
+ReactDOM.render(<App />, rootElement);
