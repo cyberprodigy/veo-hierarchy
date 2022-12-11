@@ -6,6 +6,7 @@ import healthCheck from './middlewares/healthCheck';
 import createNode from './middlewares/createNode';
 import readinessCheck from './middlewares/readinessCheck';
 import getAllNodes from './middlewares/getAllNodes';
+import getAllEdges from './middlewares/getAllEdges';
 
 async function bootstrap() {
   const PORT = process.env.PORT || 4000;
@@ -19,7 +20,8 @@ async function bootstrap() {
     .use(healthCheck())
     .use(readinessCheck())
     .use(createNode())
-    .use(getAllNodes());
+    .use(getAllNodes())
+    .use(getAllEdges());
 
   app.listen(PORT);
 

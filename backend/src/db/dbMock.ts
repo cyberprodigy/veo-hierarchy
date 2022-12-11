@@ -7,6 +7,11 @@ type Node = {
     children: Node[];
 }
 
+type Edge = {
+    fromId: number;
+    toId: number;
+}
+
 let nextId = 2;
 
 const rootNode: Node = {
@@ -42,6 +47,9 @@ export const dbMock = {
 
     getAllNodes: () => {
         return Promise.resolve(rootNode);
+
+    getAllEdges: () => {
+        return Promise.resolve(getAllEdges(rootNode));
     }
 }
 
@@ -59,4 +67,13 @@ function findElementInGraphById(graph: Node, id: number): Node | null {
 }
 
 
+function getAllEdges(graph: Node): Edge[] {
+    const edges: Edge[] = [];
+    for (let i = 0; i < graph.children.length; i++) {
+        edges.push({fromId: graph.id, toId: graph.children[i].id});
+        edges.push(...getAllEdges(graph.children[i]));
+    }
+    return edges;
+}
+    
 
