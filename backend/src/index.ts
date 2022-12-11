@@ -5,6 +5,7 @@ import express from 'express';
 import healthCheck from './middlewares/healthCheck';
 import createNode from './middlewares/createNode';
 import readinessCheck from './middlewares/readinessCheck';
+import getAllNodes from './middlewares/getAllNodes';
 
 async function bootstrap() {
   const PORT = process.env.PORT || 4000;
@@ -17,7 +18,8 @@ async function bootstrap() {
   app
     .use(healthCheck())
     .use(readinessCheck())
-    .use(createNode());
+    .use(createNode())
+    .use(getAllNodes());
 
   app.listen(PORT);
 

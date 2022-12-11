@@ -3,7 +3,7 @@
 type Node = {
     id: number;
     name: string;
-    parent: Node | null;
+    parentId: number | null;
     children: Node[];
 }
 
@@ -12,17 +12,18 @@ let nextId = 2;
 const rootNode: Node = {
     id: 1,
     name: "CEO",
-    parent: null,
+    parentId: null,
     children: []
 }
 
 export const dbMock = {
-    createNode: (node: Pick<Node, 'name' >, parrentNodeId: number) => {
-        const parrentNode = findElementInGraphById(rootNode, parrentNodeId);
+    createNode: (node: Pick<Node, 'name' >, parentNodeId: string) => {
+        const parentId = parseInt(parentNodeId);
+        const parrentNode = findElementInGraphById(rootNode, parentId);
         if (parrentNode) {
             const newNode = {
                 ...node,
-                parent: parrentNode,
+                parentId: parentId,
                 children: [],
                 id: nextId
             }
@@ -36,6 +37,10 @@ export const dbMock = {
 
     getNode: (id: number) => {
         findElementInGraphById(rootNode, id)
+        return Promise.resolve(rootNode);
+    },
+
+    getAllNodes: () => {
         return Promise.resolve(rootNode);
     }
 }
