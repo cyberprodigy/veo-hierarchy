@@ -1,16 +1,5 @@
-// implement dbMock with curd operations
-
-type Node = {
-    id: number;
-    name: string;
-    parentId: number | null;
-    children: Node[];
-}
-
-type Edge = {
-    fromId: number;
-    toId: number;
-}
+import { Edge } from '../../../shared/Edge';
+import { Node } from '../../../shared/Node';
 
 let nextId = 2;
 
