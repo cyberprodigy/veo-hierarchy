@@ -5,7 +5,8 @@ import { dbMock } from '../db/dbMock';
 const router = express.Router();
 
 router.post('/createNode', async (req: Request, res: Response) => {
-  const newNode = await dbMock.createNode({name: "CEO"}, 1)
+  const {name, parentId} = req.body;
+  const newNode = await dbMock.createNode({name}, parentId)
   res.send(newNode);
 });
 
