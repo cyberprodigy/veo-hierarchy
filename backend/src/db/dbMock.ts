@@ -16,15 +16,45 @@ let nextId = 2;
 
 const rootNode: Node = {
     id: 1,
-    name: "CEO",
+    name: "root",
     parentId: null,
-    children: []
+    children: [ {
+        id: 2,
+        name: "a",
+        parentId: 1,
+        children: [
+            {
+                id: 4,
+                name: "c",
+                parentId: 2,
+                children: [
+                    {
+                        id: 5,
+                        name: "d",
+                        parentId: 4,
+                        children: []
+                    },
+                    {
+                        id: 6,
+                        name: "e",
+                        parentId: 4,
+                        children: []
+                    }
+                ]
+            }
+        ]
+    },  {
+        id: 3,
+        name: "b",
+        parentId: 1,
+        children: []
+    }]
 }
 
 export const dbMock = {
     createNode: (node: Pick<Node, 'name' >, parentNodeId: string) => {
         const parentId = parseInt(parentNodeId);
-        const parrentNode = findElementInGraphById(rootNode, parentId);
+        const parrentNode = getNodeById(rootNode, parentId);
         if (parrentNode) {
             const newNode = {
                 ...node,
@@ -41,24 +71,25 @@ export const dbMock = {
     },
 
     getNode: (id: number) => {
-        findElementInGraphById(rootNode, id)
+        getNodeById(rootNode, id)
         return Promise.resolve(rootNode);
     },
 
     getAllNodes: () => {
         return Promise.resolve(rootNode);
+    },
 
     getAllEdges: () => {
         return Promise.resolve(getAllEdges(rootNode));
     }
 }
 
-function findElementInGraphById(graph: Node, id: number): Node | null {
+function getNodeById(graph: Node, id: number): Node | null {
     if (graph.id === id) {
         return graph;
     }
     for (let i = 0; i < graph.children.length; i++) {
-        const found = findElementInGraphById(graph.children[i], id);
+        const found = getNodeById(graph.children[i], id);
         if (found) {
             return found;
         }
